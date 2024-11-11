@@ -61,3 +61,28 @@ func (h HTTPGateway) CreateArtistGateway(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(entities.ResponseModel{Message: "success"})
 }
 
+func (h HTTPGateway) UpdateArtistGateway(ctx *fiber.Ctx) error {
+	// tokenData, err := middlewares.DecodeJWTToken(ctx)
+	// if err != nil {
+	// 	return ctx.Status(fiber.StatusUnauthorized).JSON(entities.ResponseModel{Message: err.Error()})
+	// }	
+
+	// myuserID := tokenData.UserID
+
+	params := ctx.Queries()
+	name := params["name"]
+
+	var data entities.ArtistDataFormat
+
+	if err := ctx.BodyParser(&data); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(entities.ResponseModel{Message: err.Error()})
+	}
+
+	err := h.artistService.UpdateArtistByNameService(name, data)
+
+	if err != nil {
+		return ctx.Status(fiber.StatusForbidden).JSON(entities.ResponseModel{Message: err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(entities.ResponseModel{Message: "success"})
+}

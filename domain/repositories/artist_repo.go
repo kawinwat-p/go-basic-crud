@@ -22,7 +22,7 @@ type IArtistsRepository interface {
 	GetAllArtists() ([]entities.ArtistDataFormat, error)
 	GetArtistByName(name string) (*entities.ArtistDataFormat, error)
 	// ArtistExist(name string) (bool, error)
-	// UpdateArtistByName(name string, data entities.ArtistDataFormat) error
+	UpdateArtistByName(name string, data entities.ArtistDataFormat) error
 	CreateArtist(data entities.ArtistDataFormat) error
 	// DeleteArtistByName(name string) error
 }
@@ -73,6 +73,19 @@ func (repo artistsRepository) GetArtistByName(name string) (*entities.ArtistData
 
 func (repo artistsRepository) CreateArtist(data entities.ArtistDataFormat) error{
 	_, err := repo.Collection.InsertOne(repo.Context, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (repo artistsRepository) UpdateArtistByName(name string, data entities.ArtistDataFormat) error {
+	filter := bson.M{"artist_name": name}
+	update := bson.M{"$set": data}
+
+	_, err := repo.Collection.UpdateOne(repo.Context, filter, update)
 
 	if err != nil {
 		return err

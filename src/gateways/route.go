@@ -8,4 +8,5 @@ func GatewayArtists(gateway HTTPGateway, app *fiber.App) {
 	apiArtist.Get("/get_all_artists",gateway.GetAllArtistsGateway)
 	apiArtist.Get("/get_artist",gateway.GetArtistByNameGateway)
 	apiArtist.Post("/create_artist",gateway.CreateArtistGateway)
+	apiArtist.Put("/update_artist",gateway.UpdateArtistGateway)
 }
