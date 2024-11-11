@@ -23,7 +23,7 @@ type IArtistsRepository interface {
 	GetArtistByName(name string) (*entities.ArtistDataFormat, error)
 	// ArtistExist(name string) (bool, error)
 	// UpdateArtistByName(name string, data entities.ArtistDataFormat) error
-	// CreateArtist(data entities.ArtistDataFormat) error
+	CreateArtist(data entities.ArtistDataFormat) error
 	// DeleteArtistByName(name string) error
 }
 
@@ -69,4 +69,14 @@ func (repo artistsRepository) GetArtistByName(name string) (*entities.ArtistData
 	}
 
 	return &result, nil
+}
+
+func (repo artistsRepository) CreateArtist(data entities.ArtistDataFormat) error{
+	_, err := repo.Collection.InsertOne(repo.Context, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
