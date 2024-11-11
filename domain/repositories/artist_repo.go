@@ -24,7 +24,7 @@ type IArtistsRepository interface {
 	// ArtistExist(name string) (bool, error)
 	UpdateArtistByName(name string, data entities.ArtistDataFormat) error
 	CreateArtist(data entities.ArtistDataFormat) error
-	// DeleteArtistByName(name string) error
+	DeleteArtistByName(name string) error
 }
 
 func NewArtistsRepository(db *MongoDB) IArtistsRepository {
@@ -86,6 +86,18 @@ func (repo artistsRepository) UpdateArtistByName(name string, data entities.Arti
 	update := bson.M{"$set": data}
 
 	_, err := repo.Collection.UpdateOne(repo.Context, filter, update)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (repo artistsRepository) DeleteArtistByName(name string) error {
+	filter := bson.M{"artist_name": name}
+
+	_, err := repo.Collection.DeleteOne(repo.Context, filter)
 
 	if err != nil {
 		return err

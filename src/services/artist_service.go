@@ -17,6 +17,7 @@ type IArtistService interface {
 	GetArtistByNameService(name string) (*entities.ArtistDataFormat, error)
 	CreateArtistService(data entities.ArtistDataFormat) error
 	UpdateArtistByNameService(name string, data entities.ArtistDataFormat) error
+	DeleteArtistByNameService(name string) error
 }
 
 func NewArtistService(artistRepository repositories.IArtistsRepository) IArtistService {
@@ -70,8 +71,22 @@ func (sv artistService) UpdateArtistByNameService(name string, data entities.Art
 	if name == ""{
 		return errors.New("name is required")
 	}
-	
+
 	err := sv.ArtistRepository.UpdateArtistByName(name, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (sv artistService) DeleteArtistByNameService(name string) error {
+	if name == ""{
+		return errors.New("name is required")
+	}
+
+	err := sv.ArtistRepository.DeleteArtistByName(name)
 
 	if err != nil {
 		return err

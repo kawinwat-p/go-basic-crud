@@ -86,3 +86,23 @@ func (h HTTPGateway) UpdateArtistGateway(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(entities.ResponseModel{Message: "success"})
 }
+
+func (h HTTPGateway) DeleteArtistGateway(ctx *fiber.Ctx) error {
+	// tokenData, err := middlewares.DecodeJWTToken(ctx)
+	// if err != nil {
+	// 	return ctx.Status(fiber.StatusUnauthorized).JSON(entities.ResponseModel{Message: err.Error()})
+	// }
+
+	// myuserID := tokenData.UserID
+
+	params := ctx.Queries()
+	name := params["name"]
+
+	err := h.artistService.DeleteArtistByNameService(name)
+
+	if err != nil {
+		return ctx.Status(fiber.StatusForbidden).JSON(entities.ResponseModel{Message: err.Error()})
+	}	
+
+	return ctx.Status(fiber.StatusOK).JSON(entities.ResponseModel{Message: "success"})
+}
